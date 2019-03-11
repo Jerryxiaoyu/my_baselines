@@ -9,7 +9,7 @@ class VecNormalize(VecEnvWrapper):
     and returns from an environment.
     """
 
-    def __init__(self, venv, ob=True, ret=True, clipob=10., cliprew=10., gamma=0.99, epsilon=1e-8):
+    def __init__(self, venv, ob=True, ret=True, clipob=10., cliprew=10., gamma=0.99, epsilon=1e-8 ):
         VecEnvWrapper.__init__(self, venv)
         self.ob_rms = RunningMeanStd(shape=self.observation_space.shape) if ob else None
         self.ret_rms = RunningMeanStd(shape=()) if ret else None
@@ -18,6 +18,7 @@ class VecNormalize(VecEnvWrapper):
         self.ret = np.zeros(self.num_envs)
         self.gamma = gamma
         self.epsilon = epsilon
+
 
     def step_wait(self):
         obs, rews, news, infos = self.venv.step_wait()
@@ -37,7 +38,10 @@ class VecNormalize(VecEnvWrapper):
         else:
             return obs
 
-    def reset(self):
+    def reset(self ):
         self.ret = np.zeros(self.num_envs)
+
         obs = self.venv.reset()
+
+
         return self._obfilt(obs)

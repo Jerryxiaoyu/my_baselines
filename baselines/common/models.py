@@ -28,7 +28,7 @@ def nature_cnn(unscaled_images, **conv_kwargs):
 
 
 @register("mlp")
-def mlp(num_layers=2, num_hidden=64, activation=tf.tanh, layer_norm=False):
+def mlp(num_layers=2, num_hidden=(256,128), activation=tf.tanh, layer_norm=False):
     """
     Stack of fully-connected layers to be used in a policy / q-function approximator
 
@@ -46,14 +46,25 @@ def mlp(num_layers=2, num_hidden=64, activation=tf.tanh, layer_norm=False):
 
     function that builds fully connected network with a given input tensor / placeholder
     """
+    # def network_fn(X):
+    #     h = tf.layers.flatten(X)
+    #     for i in range(num_layers):
+    #         h = fc(h, 'mlp_fc{}'.format(i), nh=num_hidden, init_scale=np.sqrt(2))
+    #         if layer_norm:
+    #             h = tf.contrib.layers.layer_norm(h, center=True, scale=True)
+    #         h = activation(h)
+    #
+    #     return h
+    #
+    # return network_fn
     def network_fn(X):
         h = tf.layers.flatten(X)
         for i in range(num_layers):
-            h = fc(h, 'mlp_fc{}'.format(i), nh=num_hidden, init_scale=np.sqrt(2))
+            h = fc(h, 'mlp_fc{}'.format(i), nh=num_hidden[i], init_scale=np.sqrt(2))
             if layer_norm:
                 h = tf.contrib.layers.layer_norm(h, center=True, scale=True)
             h = activation(h)
-
+        #print('hidden layer: ', num_hidden)
         return h
 
     return network_fn

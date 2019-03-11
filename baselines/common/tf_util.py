@@ -53,6 +53,7 @@ def get_session(config=None):
     sess = tf.get_default_session()
     if sess is None:
         sess = make_session(config=config, make_default=True)
+
     return sess
 
 def make_session(config=None, num_cpu=None, make_default=False, graph=None):

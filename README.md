@@ -84,7 +84,7 @@ python -m baselines.run --alg=ppo2 --env=Humanoid-v2 --network=mlp --num_timeste
 Note that for mujoco environments fully-connected network is default, so we can omit `--network=mlp`
 The hyperparameters for both network and the learning algorithm can be controlled via the command line, for instance:
 ```bash
-python -m baselines.run --alg=ppo2 --env=Humanoid-v2 --network=mlp --num_timesteps=2e7 --ent_coef=0.1 --num_hidden=32 --num_layers=3 --value_network=copy
+python3 -m baselines.run --alg=ppo2 --env=Humanoid-v2 --network=mlp --num_timesteps=2e7 --ent_coef=0.1 --num_hidden=32 --num_layers=3 --value_network=copy
 ```
 will set entropy coefficient to 0.1, and construct fully connected network with 3 layers with 32 hidden units in each, and create a separate network for value function estimation (so that its parameters are not shared with the policy network, but the structure is the same)
 

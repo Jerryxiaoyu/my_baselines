@@ -46,7 +46,7 @@ class VecEnv(ABC):
         self.action_space = action_space
 
     @abstractmethod
-    def reset(self):
+    def reset(self ):
         """
         Reset all the environments and return an array of
         observations, or a dict of observation arrays.
@@ -154,7 +154,7 @@ class VecEnvWrapper(VecEnv):
         self.venv.step_async(actions)
 
     @abstractmethod
-    def reset(self):
+    def reset(self ):
         pass
 
     @abstractmethod
