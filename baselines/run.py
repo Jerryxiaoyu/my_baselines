@@ -1,4 +1,11 @@
+
 import sys
+import os
+path = '/opt/ros/kinetic/lib/python2.7/dist-packages'
+if path in sys.path:
+    sys.path.remove(path)
+#
+os.chdir('/home/drl/PycharmProjects/rl_baselines/my_baselines')
 import multiprocessing
 import os.path as osp
 import gym
@@ -12,6 +19,8 @@ from baselines.common.cmd_util import common_arg_parser, parse_unknown_args, mak
 from baselines.common.tf_util import get_session
 from baselines import logger
 from importlib import import_module
+
+from my_envs.mujoco import *
 
 try:
     from mpi4py import MPI
@@ -89,6 +98,8 @@ def build_env(args):
     alg = args.alg
     seed = args.seed
 
+
+
     env_type, env_id = get_env_type(args)
 
     if env_type in {'atari', 'retro'}:
@@ -106,6 +117,7 @@ def build_env(args):
                                intra_op_parallelism_threads=1,
                                inter_op_parallelism_threads=1)
         config.gpu_options.allow_growth = True
+
         get_session(config=config)
 
         flatten_dict_observations = alg not in {'her'}
@@ -189,7 +201,7 @@ def parse_cmdline_kwargs(args):
     return {k: parse(v) for k,v in parse_unknown_args(args).items()}
 
 
-
+import datetime
 def main(args):
     # configure logger, disable logging in child MPI processes (with rank > 0)
 
@@ -200,9 +212,24 @@ def main(args):
     if args.extra_import is not None:
         import_module(args.extra_import)
 
+    # """create log-files"""
+    # EXP_name = 'TRPO'
+    # log_name = 'No_' + str(args.exp_no) + '-' + args.env   + '_' + str(args.alg)
+    # log_group = args.exp_group_dir
+    #
+    #
+    # if log_group is not None:
+    #     root_path = os.path.join('log-files', log_group)
+    # else:
+    #     root_path = os.path.join('log-files' )
+    # now = datetime.datetime.now().strftime("%b-%d_%H:%M:%S")
+    #
+    # log_path = os.path.join(root_path, EXP_name + '_' + args.env, log_name+'-'+now)
+
+
     if MPI is None or MPI.COMM_WORLD.Get_rank() == 0:
         rank = 0
-        logger.configure()
+        log_dir = logger.configure()
     else:
         logger.configure(format_strs=[])
         rank = MPI.COMM_WORLD.Get_rank()
@@ -210,8 +237,10 @@ def main(args):
     model, env = train(args, extra_args)
 
     if args.save_path is not None and rank == 0:
-        save_path = osp.expanduser(args.save_path)
-        model.save(save_path)
+
+        save_path = os.path.join(log_dir,'model')#osp.expanduser(args.save_path)
+        os.makedirs(save_path, exist_ok=True)
+        model.save(save_path+'/model')
 
     if args.play:
         logger.log("Running trained model")
@@ -232,7 +261,7 @@ def main(args):
             env.render()
             done = done.any() if isinstance(done, np.ndarray) else done
             if done:
-                print(f'episode_rew={episode_rew}')
+                print('episode_rew={}'.format(episode_rew))
                 episode_rew = 0
                 obs = env.reset()
 

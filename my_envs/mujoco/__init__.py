@@ -9,6 +9,7 @@ from my_envs.mujoco.cellrobotCPG import CellRobotEnvCPG
 from my_envs.mujoco.cellrobotFull import CellRobotEnvFull
 from my_envs.mujoco.cellrobotCPG2 import CellRobotEnvCPG2
 from my_envs.mujoco.cellrobotCPG3 import CellRobotEnvCPG3
+from my_envs.mujoco.cellrobotCPG4 import CellRobotEnvCPG4
 from my_envs.mujoco.my_ant import MyAntEnv
 
 register(
@@ -35,6 +36,13 @@ register(
     id='CellrobotEnvCPG3-v0',
     entry_point='my_envs.mujoco:CellRobotEnvCPG3 ',
     max_episode_steps=20,
+    reward_threshold=6000.0,
+)
+
+register(
+    id='CellrobotEnvCPG4-v0',
+    entry_point='my_envs.mujoco:CellRobotEnvCPG4 ',
+    max_episode_steps=2000,
     reward_threshold=6000.0,
 )
 register(

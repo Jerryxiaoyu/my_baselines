@@ -59,13 +59,14 @@ class VG(VariantGenerator):
     @variant
     def buffer_mode(self):
         return [1]
+    @variant
+    def CPG_enable(self):
+        return [0]
 
 
 
 
-
-
-exp_id = 19
+exp_id = 20
 EXP_NAME ='_TRPO'
 group_note ="************ABOUT THIS EXPERIMENT****************\n" \
             " CPG2 test" \
@@ -156,7 +157,9 @@ for v in variants:
         os.environ["BUFFER_MODE"] = str(v['buffer_mode'])
         print('BUFFER_MODE = ', os.getenv('BUFFER_MODE'))
 
-
+    if v['CPG_enable'] is not None:
+        os.environ["CPG_ENABLE"] = str(v['CPG_enable'])
+        print('CPG_ENABLE = ', os.getenv('CPG_ENABLE'))
     # os.system("mpirun -np {} python3 -m baselines.run ".format(n_cpu)  +
     #           " --seed " + str(seed) +
     #           " --env " + str(env) +

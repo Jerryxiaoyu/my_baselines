@@ -13,7 +13,7 @@ path = '/opt/ros/kinetic/lib/python2.7/dist-packages'
 if path in sys.path:
     sys.path.remove(path)
 #
-os.chdir('/home/drl/PycharmProjects/rl_baselines/baselines')
+os.chdir('/home/drl/PycharmProjects/rl_baselines/my_baselines')
 import multiprocessing
 import os.path as osp
 import gym

@@ -360,16 +360,18 @@ class Logger(object):
         for fmt in self.output_formats:
             if isinstance(fmt, SeqWriter):
                 fmt.writeseq(map(str, args))
-
+#logname=None,txt='', format_strs=None, comm=None, log_group = None
 def configure(dir=None, format_strs=None, comm=None):
     """
     If comm is provided, average all numerical stats across that comm
     """
     if dir is None:
-        dir = os.getenv('OPENAI_LOGDIR')
+        dir =  os.getenv('OPENAI_LOGDIR')
+
     if dir is None:
         dir = osp.join(tempfile.gettempdir(),
             datetime.datetime.now().strftime("openai-%Y-%m-%d-%H-%M-%S-%f"))
+    print(dir)
     assert isinstance(dir, str)
     os.makedirs(dir, exist_ok=True)
 
@@ -393,6 +395,8 @@ def configure(dir=None, format_strs=None, comm=None):
 
     Logger.CURRENT = Logger(dir=dir, output_formats=output_formats, comm=comm)
     log('Logging to %s'%dir)
+
+    return dir
 
 def _configure_default_logger():
     configure()

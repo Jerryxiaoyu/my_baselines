@@ -13,11 +13,12 @@ class sin_oscillator(object):
         # Step time
         self.dt = dt
     
-    def oscillator_fun(self, R1, X1, f12 ,   w_0, u1, u2,  r1, r2 ,  kf = None ):
+    def oscillator_fun(self, R1, X1, f12 ,   w_0, u1, u2,  r1, r2 ,  kf  ):
         """
         Calculates the state variables in the next time step
         """
-
+        if kf != 0:
+            self.tau = kf
         d_u1_dt = (2 * pi * self.v1 + w_0 * r2 * sin(u2 - u1 - f12)) / self.tau
 
         r1_dt = self.a1 * (R1 - r1)
@@ -58,6 +59,6 @@ class CPG_SinNeutron(object):
             
         
         self.parm['o'],self.parm['u1'], self.parm['r1']  = \
-            self.osillator_fun(self.parm['R1'],self.parm['X1'], self.parm['f12'], self.w_ms, self.parm['u1'], u2, self.parm['r1'], r2  )
+            self.osillator_fun(self.parm['R1'],self.parm['X1'], self.parm['f12'], self.w_ms, self.parm['u1'], u2, self.parm['r1'], r2, self.parm['kf']  )
         
   
